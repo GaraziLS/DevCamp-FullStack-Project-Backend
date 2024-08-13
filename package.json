@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Backend for bottega capstone project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GaraziLS/DevCamp-Full-Stack-Capstone-Project-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GaraziLS/DevCamp-Full-Stack-Capstone-Project-Backend/issues"
+  },
+  "homepage": "https://github.com/GaraziLS/DevCamp-Full-Stack-Capstone-Project-Backend#readme"
+}
