@@ -98,49 +98,6 @@ def register_user():
 
     return user_schema.jsonify(user)
 
-@app.route('/login', methods=['POST'])
-# def login():
-# def login():
-#     if request.method == 'OPTIONS':
-#         return Preflight_Helper()
-#     elif request.method == 'POST':
-#         return Response(), login_user()
-    #     # This is the preflight request
-    #     response = jsonify({'status': 'preflight successful'})
-    #     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    #     response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-    #     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    #     return response, 200
- 
-
-    # # Actual POST request handling
-    # response = jsonify({'message': 'Login successful'})
-    # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    # response.headers.add('Access-Control-Allow-Credentials', 'true')
-    # return response, 200
-
-    # def Preflight_Helper():
-    #     response = make_response()
-    #     response.headers.add("Access-Control-Allow-Origin", "*")
-    #     response.headers.add('Access-Control-Allow-Headers', "*")
-    #     response.headers.add('Access-Control-Allow-Methods', "*")
-    #     return response
-    
-    # def Response(response):
-    #     response.headers.add("Access-Control-Allow-Origin", "*")
-
-# def login_user():
-#     username = request.json["user_name"]
-#     password = request.json["user_password"]
-
-#     user = User.query.filter_by(user_name=username).first()
-
-#     if user and user.user_password == password:
-#         return user_schema.jsonify(user)
-#     else:
-#         return jsonify({"Warning": "Wrong username or password"}), 401
-
 @app.route("/login", methods=["POST", "OPTIONS"])
 def user_login():
     if request.method == 'OPTIONS':
