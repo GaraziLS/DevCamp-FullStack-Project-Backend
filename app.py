@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify, make_response
-import flask_cors
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from flask_marshmallow import Marshmallow
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import os
 
 
