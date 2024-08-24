@@ -126,7 +126,7 @@ def user_login():
             return response, 401
     
 ## TODO: Refactor this preflight thing, if possible.
-    
+
 ## TODO: Create a function that checks if a username is available or not when signing up.
 
 # Route to get all the items
