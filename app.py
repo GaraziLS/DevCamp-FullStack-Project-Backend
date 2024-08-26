@@ -37,11 +37,10 @@ class Item(db.Model):
     item_content = db.Column(db.UnicodeText, unique=False)
     item_user_id = db.Column(db.Integer, ForeignKey('user.user_id'))
 
-    def __init__(self, item_title, item_category, item_content, item_user_id):
+    def __init__(self, item_title, item_category, item_content):
         self.item_title = item_title
         self.item_category = item_category
         self.item_content = item_content
-        self.item_user_id = item_user_id
 
 
 
@@ -57,28 +56,36 @@ users_schema = UserSchema(many=True)
 
 class ItemSchema(ma.Schema):
     class Meta:
-        fields = ("item_id", "item_title", "item_category", "item_content", "item_user_id")
+        fields = ("item_id", "item_title", "item_category", "item_content")
 
 item_schema = ItemSchema()
 items_schema = ItemSchema(many=True)
 
 # Route to create a new item
 
-@app.route("/create", methods=['POST'])
+@app.route("/create", methods=['POST', 'OPTIONS'])
 def add_item():
-    title = request.json["item_title"]
-    category = request.json["item_category"]
-    content = request.json["item_content"]
-    item_user_id = request.json["item_user_id"]
+    if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'POST':
+        title = request.form.get("Item[item_title]")
+        category = request.form.get("Item[item_category]")
+        content = request.form.get("Item[item_content]")
 
-    new_item_instance = Item(title, category, content, item_user_id)
+        new_item_instance = Item(title, category, content)
 
-    db.session.add(new_item_instance)
-    db.session.commit()
+        db.session.add(new_item_instance)
+        db.session.commit()
 
-    item = Item.query.get(new_item_instance.item_id) 
-
-    return item_schema.jsonify(item)
+        item = Item.query.get(new_item_instance.item_id)
+        return item_schema.jsonify(item)
 
 # Route to sign up a new account
 
@@ -167,12 +174,10 @@ def item_update(id):
     item_title = request.json["item_title"]
     item_category = request.json["item_category"]
     item_content = request.json["item_content"]
-    item_user_id = request.json["item_user_id"]
 
     update_item_query.item_title = item_title
     update_item_query.item_category = item_category
     update_item_query.item_content = item_content
-    update_item_query.item_user_id = item_user_id
 
     db.session.commit()
     return item_schema.jsonify(update_item_query)
