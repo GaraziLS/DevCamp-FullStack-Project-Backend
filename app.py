@@ -168,19 +168,29 @@ def get_user(id):
 
 # Route to update an item
 
-@app.route("/tables/<id>", methods=["PUT"])
+@app.route("/tables/<id>", methods=["PUT", "OPTIONS"])
 def item_update(id):
-    update_item_query = Item.query.get(id)
-    item_title = request.json["item_title"]
-    item_category = request.json["item_category"]
-    item_content = request.json["item_content"]
+    if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'PUT, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'PUT':
+        update_item_query = Item.query.get(id)
+        item_title = request.form.get["item_title"]
+        item_category = request.form.get["item_category"]
+        item_content = request.form.get["item_content"]
 
-    update_item_query.item_title = item_title
-    update_item_query.item_category = item_category
-    update_item_query.item_content = item_content
+        update_item_query.item_title = item_title
+        update_item_query.item_category = item_category
+        update_item_query.item_content = item_content
 
-    db.session.commit()
-    return item_schema.jsonify(update_item_query)
+        db.session.commit()
+        return item_schema.jsonify(update_item_query)
 
 # Route to delete an item
 
