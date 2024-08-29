@@ -181,9 +181,9 @@ def item_update(id):
     
     elif request.method == 'PUT':
         update_item_query = Item.query.get(id)
-        item_title = request.form.get["item_title"]
-        item_category = request.form.get["item_category"]
-        item_content = request.form.get["item_content"]
+        item_title = request.form.get("Item[item_title]")
+        item_category = request.form.get("Item[item_category]")
+        item_content = request.form.get("Item[item_content]")
 
         update_item_query.item_title = item_title
         update_item_query.item_category = item_category
