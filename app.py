@@ -11,7 +11,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
-CORS(app, origins= "http://localhost:3000", supports_credentials=True, allow_headers=["Authentication", "Content-Type"])
+CORS(app, origins= "https://devcamp-fullstack-project-backend.onrender.com", supports_credentials=True, allow_headers=["Authentication", "Content-Type"])
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -75,7 +75,7 @@ def add_item():
     if request.method == 'OPTIONS':
         # Handle the preflight request
         response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Origin', 'https://devcamp-fullstack-project-backend.onrender.com')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -116,7 +116,7 @@ def user_login():
     if request.method == 'OPTIONS':
         # Handle the preflight request
         response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Origin', 'https://devcamp-fullstack-project-backend.onrender.com')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -130,12 +130,12 @@ def user_login():
 
         if user and user.user_password == user_password:
             response = jsonify({'message': 'Login successful'})
-            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+            response.headers.add('Access-Control-Allow-Origin', 'https://devcamp-fullstack-project-backend.onrender.com')
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response, 200
         else:
             response = jsonify({"Warning": "Wrong username or password"})
-            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+            response.headers.add('Access-Control-Allow-Origin', 'https://devcamp-fullstack-project-backend.onrender.com')
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response, 401
     
@@ -180,7 +180,7 @@ def item_update(id):
     if request.method == 'OPTIONS':
         # Handle the preflight request
         response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Origin', 'https://devcamp-fullstack-project-backend.onrender.com')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'PUT, OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -224,4 +224,4 @@ def init_db():
 if __name__ == '__main__':
     with app.app_context(): 
         init_db()  
-    app.run(host="localhost", port=5000, debug=True)
+    app.run(debug=True)
