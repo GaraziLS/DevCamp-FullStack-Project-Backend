@@ -63,11 +63,10 @@ items_schema = ItemSchema(many=True)
 
 # Route to get the root url
 
-@app.route("/", methods=['GET'])
-def get_items():
-    all_items = Item.query.all()
-    result = items_schema.dump(all_items)
-    return jsonify(result)
+# Root route
+@app.route('/')
+def home():
+    return "Server is up and running!", 200
 
 # Route to create a new item
 
