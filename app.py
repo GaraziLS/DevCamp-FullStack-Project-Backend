@@ -61,6 +61,14 @@ class ItemSchema(ma.Schema):
 item_schema = ItemSchema()
 items_schema = ItemSchema(many=True)
 
+# Route to get the root url
+
+@app.route("/", methods=['GET'])
+def get_items():
+    all_items = Item.query.all()
+    result = items_schema.dump(all_items)
+    return jsonify(result)
+
 # Route to create a new item
 
 @app.route("/create", methods=['POST', 'OPTIONS'])
