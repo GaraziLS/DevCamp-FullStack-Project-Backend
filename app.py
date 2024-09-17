@@ -179,7 +179,7 @@ def item_update(id):
     if request.method == 'OPTIONS':
         # Handle the preflight request
         response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'https://garazils.github.io/')
+        response.headers.add('Access-Control-Allow-Origin', 'https://garazils.github.io')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'PUT, OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
