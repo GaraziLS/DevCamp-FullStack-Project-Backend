@@ -11,15 +11,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
-CORS(app)
-@app.after_request
-def add_cors_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
-
+CORS(app, resources={r"/*": {"origins": "https://garazils.github.io"}}, supports_credentials=True)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
