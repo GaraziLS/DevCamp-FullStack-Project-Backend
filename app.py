@@ -11,7 +11,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
-CORS(app, origins= "https://garaziLS.github.io/", supports_credentials=True, allow_headers=["Authentication", "Content-Type"])
+CORS(app, resources={r"/*": {"origins": "https://garaziLS.github.io", "supports_credentials": True}})
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
