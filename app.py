@@ -96,20 +96,31 @@ def add_item():
 
 # Route to sign up a new account
 
-@app.route("/signup", methods=['POST'])
+@app.route("/signup", methods=['POST', 'OPTIONS'])
 def register_user():
-    user_name = request.json["user_name"]
-    user_email = request.json["user_email"]
-    user_password = request.json["user_password"]
+    
+    if request.method == 'OPTIONS':
+    # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'POST':
+        user_name = request.json["user_name"]
+        user_email = request.json["user_email"]
+        user_password = request.json["user_password"]
 
-    registered_user_instance = User(user_name, user_email, user_password)
+        registered_user_instance = User(user_name, user_email, user_password)
 
-    db.session.add(registered_user_instance)
-    db.session.commit()
+        db.session.add(registered_user_instance)
+        db.session.commit()
 
-    user = User.query.get(registered_user_instance.user_id) 
+        user = User.query.get(registered_user_instance.user_id) 
 
-    return user_schema.jsonify(user)
+        return user_schema.jsonify(user)
 
 @app.route("/login", methods=["POST", "OPTIONS"])
 def user_login():
@@ -145,33 +156,73 @@ def user_login():
 
 # Route to get all the items
 
-@app.route("/tables", methods=['GET'])
+@app.route("/tables", methods=['GET', 'OPTIONS'])
 def get_items():
-    all_items = Item.query.all()
-    result = items_schema.dump(all_items)
-    return jsonify(result)
+    if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'GET':
+        all_items = Item.query.all()
+        result = items_schema.dump(all_items)
+        return jsonify(result)
 
 ## Route to get all the users
 
-@app.route("/users", methods=['GET'])
+@app.route("/users", methods=['GET', 'OPTIONS'])
 def get_users():
-    all_users = User.query.all()
-    result = users_schema.dump(all_users)
-    return jsonify(result)
+     if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+     
+     elif request.method == 'GET':
+        all_users = User.query.all()
+        result = users_schema.dump(all_users)
+        return jsonify(result)
 
 # Route to get a single item
 
-@app.route("/tables/<id>", methods=['GET'])
+@app.route("/tables/<id>", methods=['GET', 'OPTIONS'])
 def get_item(id):
-    single_item = Item.query.get(id)
-    return item_schema.jsonify(single_item)
+    if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'GET':
+        single_item = Item.query.get(id)
+        return item_schema.jsonify(single_item)
 
 # Route to get a single user
 
-@app.route("/users/<id>", methods=['GET'])
+@app.route("/users/<id>", methods=['GET', 'OPTIONS'])
 def get_user(id):
-    single_user = User.query.get(id)
-    return user_schema.jsonify(single_user)
+    if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    elif request.method == 'GET':
+        single_user = User.query.get(id)
+        return user_schema.jsonify(single_user)
 
 # Route to update an item
 
@@ -201,21 +252,41 @@ def item_update(id):
 
 # Route to delete an item
 
-@app.route("/tables/<id>", methods=["DELETE"])
+@app.route("/tables/<id>", methods=["DELETE", "OPTIONS"])
 def delete_item(id):
-    item = Item.query.get(id)
-    db.session.delete(item)
-    db.session.commit()
-    return "Item was deleted"
+     if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'DELETE, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+     
+     elif request.method == "DELETE":
+        item = Item.query.get(id)
+        db.session.delete(item)
+        db.session.commit()
+        return "Item was deleted"
 
 # Route to delete a user
 
-@app.route("/users/<id>", methods=["DELETE"])
+@app.route("/users/<id>", methods=["DELETE", "OPTIONS"])
 def delete_user(id):
-    item = User.query.get(id)
-    db.session.delete(item)
-    db.session.commit()
-    return "User account was deleted"
+    def delete_item(id):
+     if request.method == 'OPTIONS':
+        # Handle the preflight request
+        response = jsonify({'status': 'preflight successful'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'DELETE, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+     elif request.method == "DELETE":
+        item = User.query.get(id)
+        db.session.delete(item)
+        db.session.commit()
+        return "User account was deleted"
 
 
 def init_db():
