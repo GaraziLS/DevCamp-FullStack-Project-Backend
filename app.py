@@ -11,7 +11,14 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
-CORS(app, resources={r"/*": {"origins": "https://garaziLS.github.io", "supports_credentials": True}})
+CORS(app)
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -72,16 +79,16 @@ def home():
 
 @app.route("/create", methods=['POST', 'OPTIONS'])
 def add_item():
-    if request.method == 'OPTIONS':
-        # Handle the preflight request
-        response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response, 200
+    # if request.method == 'OPTIONS':
+    #     # Handle the preflight request
+    #     response = jsonify({'status': 'preflight successful'})
+    #     response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+    #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    #     response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    #     response.headers.add('Access-Control-Allow-Credentials', 'true')
+    #     return response, 200
     
-    elif request.method == 'POST':
+    if request.method == 'POST':
         title = request.form.get("Item[item_title]")
         category = request.form.get("Item[item_category]")
         content = request.form.get("Item[item_content]")
@@ -113,30 +120,30 @@ def register_user():
 
 @app.route("/login", methods=["POST", "OPTIONS"])
 def user_login():
-    if request.method == 'OPTIONS':
-        # Handle the preflight request
-        response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response, 200
+    # if request.method == 'OPTIONS':
+    #     # Handle the preflight request
+    #     response = jsonify({'status': 'preflight successful'})
+    #     response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+    #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    #     response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    #     response.headers.add('Access-Control-Allow-Credentials', 'true')
+    #     return response, 200
     
-    elif request.method == 'POST':
+    if request.method == 'POST':
         # Handle the actual POST request
         user_name = request.json["user_name"]
         user_password = request.json["user_password"]
         user = User.query.filter_by(user_name=user_name).first()
 
         if user and user.user_password == user_password:
-            response = jsonify({'message': 'Login successful'})
-            response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            # response = jsonify({'message': 'Login successful'})
+            # response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+            # response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response, 200
         else:
             response = jsonify({"Warning": "Wrong username or password"})
-            response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            # response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+            # response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response, 401
     
 ## TODO: Refactor this preflight thing, if possible.
@@ -177,16 +184,16 @@ def get_user(id):
 
 @app.route("/tables/<id>", methods=["PUT", "OPTIONS"])
 def item_update(id):
-    if request.method == 'OPTIONS':
-        # Handle the preflight request
-        response = jsonify({'status': 'preflight successful'})
-        response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'PUT, OPTIONS')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        return response, 200
+    # if request.method == 'OPTIONS':
+    #     # Handle the preflight request
+    #     response = jsonify({'status': 'preflight successful'})
+    #     response.headers.add('Access-Control-Allow-Origin', 'https://garaziLS.github.io/')
+    #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    #     response.headers.add('Access-Control-Allow-Methods', 'PUT, OPTIONS')
+    #     response.headers.add('Access-Control-Allow-Credentials', 'true')
+    #     return response, 200
     
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         update_item_query = Item.query.get(id)
         item_title = request.form.get("Item[item_title]")
         item_category = request.form.get("Item[item_category]")
